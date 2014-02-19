@@ -1,10 +1,19 @@
-from django.contrib.auth.models import User, AnonymousUser
+import inspect
+
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser
+
 from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models.signals import post_save, post_delete
+
 from follow.registry import model_map
 from follow.signals import followed, unfollowed
-import inspect
+
 
 class FollowManager(models.Manager):
     def fname(self, model_or_obj_or_qs):
